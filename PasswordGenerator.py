@@ -47,10 +47,11 @@ def generateNewLetter(password):
 		password = password[:(posReplace -1)] + getRandomLower() + password[posReplace:]
 		return password 
 
-
+#Gets a random position in the password
 def getRandPasswordPos(password):
 	return randint(1, len(password))
-	
+
+#Replaces a bit in the password with a number in the event the original password does not contain any numbers
 def generateNewNum(password):
 	posReplace = getRandPasswordPos(password);
 	password = password[:(posReplace -1)] + getRandomNum() + password[posReplace:]
