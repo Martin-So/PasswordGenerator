@@ -1,0 +1,53 @@
+================Password Generator Logs==================
+2019-04-06 15:49:58: Program start
+2019-04-06 15:49:59: Main Menu
+2019-04-06 15:49:59: Generating Email password
+2019-04-06 15:49:59: Starting Random Password Test
+2019-04-06 15:49:59: Initial password test failed, creating a new password
+2019-04-06 15:49:59: Password succesfully created
+2019-04-06 15:50:07: Generating Shopping password
+2019-04-06 15:50:07: Starting Random Password Test
+2019-04-06 15:50:07: Password succesfully created
+2019-04-06 15:50:13: Generating Banking password
+2019-04-06 15:50:13: Starting Random Password Test
+2019-04-06 15:50:13: Password succesfully created
+2019-04-06 15:50:19: Starting Random Password Test
+2019-04-06 15:50:27: Banking Random Password succesfully tested
+2019-04-06 15:50:34: Shopping Random Password Test - Incorrect password entered | Number of tries: 1
+2019-04-06 15:50:36: Shopping Random Password succesfully tested
+2019-04-06 15:51:01: Shopping Random Password succesfully tested
+================Password Generator Logs==================
+2019-04-06 15:51:35: Program start
+2019-04-06 15:51:36: Main Menu
+2019-04-06 15:51:36: Generating Email password
+2019-04-06 15:51:36: Starting Random Password Test
+2019-04-06 15:51:36: Password succesfully created
+2019-04-06 15:51:42: Generating Shopping password
+2019-04-06 15:51:42: Starting Random Password Test
+2019-04-06 15:51:42: Initial password test failed, creating a new password
+2019-04-06 15:51:42: Password succesfully created
+2019-04-06 15:51:59: Generating Banking password
+2019-04-06 15:51:59: Starting Random Password Test
+2019-04-06 15:51:59: Password succesfully created
+2019-04-06 15:52:03: Starting Random Password Test
+================Password Generator Logs==================
+2019-04-06 15:52:25: Program start
+2019-04-06 15:52:40: Main Menu
+2019-04-06 15:52:40: Generating Email password
+2019-04-06 15:52:40: Starting Random Password Test
+2019-04-06 15:52:40: Initial password test failed, creating a new password
+2019-04-06 15:52:40: Password succesfully created
+2019-04-06 15:52:45: Generating Shopping password
+2019-04-06 15:52:45: Starting Random Password Test
+2019-04-06 15:52:45: Password succesfully created
+2019-04-06 15:52:49: Generating Banking password
+2019-04-06 15:52:49: Starting Random Password Test
+2019-04-06 15:52:49: Initial password test failed, creating a new password
+2019-04-06 15:52:49: Password succesfully created
+2019-04-06 15:52:57: Starting Random Password Test
+2019-04-06 15:53:05: Banking Random Password succesfully tested
+2019-04-06 15:53:14: Shopping Random Password succesfully tested
+2019-04-06 15:53:18: Email Random Password succesfully tested
+2019-04-06 15:53:20: Main Menu
+2019-04-06 15:53:20: Program exiting
+========================================================
