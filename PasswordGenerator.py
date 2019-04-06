@@ -33,8 +33,8 @@ os.fsync(file.fileno())
 
 # Gets a random number between 0 and 26 that represents the position of the letter in the alphabet
 def getRandomLetter():
-    index = randint(0, len(letters)-1);
-    return letters[index];
+    index = randint(0, len(nato_alphabet)-1);
+    return nato_alphabet[index];
     
 # Gets a random number between 0 and 10 that represents a single digit, non negative number
 def getRandomNum():
@@ -155,9 +155,8 @@ def randomPasswordTest(passList):
         numTries = 0
         timer = 0
         print("================Random Password Tester================")
-        print(pword, counter)
+  
 
-        
         #Email password test
         # compares first index in shuffled array with first index of sorted array of passwords
         # Sorted array has order of [Email, Shopping, Banking]
