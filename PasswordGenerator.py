@@ -179,7 +179,7 @@ def randomPasswordTest(passList):
                     numTries += 1
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    line = st + ": Email Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " Time taken: " +str(timer)+ " seconds \n"
+                    line = st + ": Email Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " | Time taken: " +str(timer)+ " seconds \n"
                     file.write(line)
                     file.flush()
                     os.fsync(file.fileno())
@@ -220,7 +220,7 @@ def randomPasswordTest(passList):
                     #Gets current date & time and logs it to logs.txt
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    line = st + ": Shopping Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " Time taken: " +str(timer)+ " seconds \n"
+                    line = st + ": Shopping Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " | Time taken: " +str(timer)+ " seconds \n"
                     file.write(line)
                     file.flush()
                     os.fsync(file.fileno())
@@ -252,7 +252,7 @@ def randomPasswordTest(passList):
                     numTries += 1
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S') #Gets current time
-                    line = st + ": Banking Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " Time taken: " +str(timer)+ " seconds \n"
+                    line = st + ": Banking Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " | Time taken: " +str(timer)+ " seconds \n"
                     file.write(line)
                     file.flush()
                     os.fsync(file.fileno())
