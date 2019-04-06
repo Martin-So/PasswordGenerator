@@ -14,7 +14,8 @@ import random
 import time
 import datetime
 import os
-from random import randint
+import sys
+from random import randint, shuffle
 
 numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
@@ -32,8 +33,8 @@ os.fsync(file.fileno())
 
 # Gets a random number between 0 and 26 that represents the position of the letter in the alphabet
 def getRandomLetter():
-    index = randint(0, len(nato_alphabet)-1);
-    return nato_alphabet[index];
+    index = randint(0, len(letters)-1);
+    return letters[index];
     
 # Gets a random number between 0 and 10 that represents a single digit, non negative number
 def getRandomNum():
@@ -93,6 +94,8 @@ def generatePassword():
             
     
     return password
+
+
     
 
 def testPassword(pw):
@@ -102,11 +105,12 @@ def testPassword(pw):
     file.flush()
     os.fsync(file.fileno())
     userInput = "";
-    
+    timer = 0
     numTries = 0
         
     for x in range(0,2):
         userInput = input("Practice entering your password: ")
+        timer+=1
         if(userInput == pw):
             print("Success! Please remember your password from now on\n")
             print("================Tips to Remember your Password==================")
@@ -119,7 +123,7 @@ def testPassword(pw):
             print("G = Golf         N = November        U = Uniform")
             print("===============================================================\n")
             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            file.write(st + ": Password succesfully created\n")
+            file.write(st + ": Password succesfully created and tested | Time taken to test: "+str(timer)+" seconds \n")
             file.flush()
             os.fsync(file.fileno())
             break;
@@ -144,24 +148,31 @@ def randomPasswordTest(passList):
     file.write(st + ": Starting Random Password Test\n")
     file.flush()
     os.fsync(file.fileno())
-    random.shuffle(passList)
-    length = 2
-    for x in passList:
-        print("================Random Password Tester================")
-        passSelect = randint(0,length)
+    randList = passList.copy()
+    shuffle(randList)
+    
+    for counter, pword in enumerate(randList):
         numTries = 0
-        #Email Password Test
-        if(passSelect == 0):
+        timer = 0
+        print("================Random Password Tester================")
+        print(pword, counter)
+
+        
+        #Email password test
+        # compares first index in shuffled array with first index of sorted array of passwords
+        # Sorted array has order of [Email, Shopping, Banking]
+        if(pword == passList[0]):
             while(numTries != 3):
                 userInput = input("Enter your email password: ")
-                if(userInput == x):
+                timer+=1
+                if(userInput == pword):
+                    
                     print("Success!\n")
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    file.write(st + ": Email Random Password succesfully tested\n")
+                    file.write(st + ": Email Random Password succesfully tested | Time taken to test: "+str(timer)+" seconds \n")
                     file.flush()
                     os.fsync(file.fileno())
-                    length -=1
                     break
                     break;
                 else:
@@ -169,7 +180,7 @@ def randomPasswordTest(passList):
                     numTries += 1
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    line = st + ": Email Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + "\n"
+                    line = st + ": Email Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " Time taken: " +str(timer)+ " seconds \n"
                     file.write(line)
                     file.flush()
                     os.fsync(file.fileno())
@@ -182,32 +193,35 @@ def randomPasswordTest(passList):
                 file.flush()
                 os.fsync(file.fileno())
                 passSelect = -1
+        
                 break;
                 break;
-                        
+
+        #Shopping Password
+        # If the current word in  shuffled array equals to the shopping password stored in the original array
+        elif(pword == passList[1]):
             
-        #Shopping PW
-        elif(passSelect == 1):
             while(numTries != 3):
+                timer+=1
                 userInput = input("Enter your shopping password: ")
-                if(userInput == x):
+                if(userInput == pword ):
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    file.write(st + ": Shopping Random Password succesfully tested\n")
+                    file.write(st + ": Shopping Random Password succesfully tested | Time taken to test: "+str(timer)+" seconds \n")
                     file.flush()
                     os.fsync(file.fileno())
                     print("Success!\n")
-                    length -= 1
+                   
                     break;
                     break;
                     
                 else:
-                    print("Error! Please try again\n")    
+                    print("Error! Please try again\n")
                     numTries+=1
                     #Gets current date & time and logs it to logs.txt
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    line = st + ": Shopping Random Password Test - Incorrect password entered | Number of tries: " + str(numTries) + "\n"
+                    line = st + ": Shopping Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " Time taken: " +str(timer)+ " seconds \n"
                     file.write(line)
                     file.flush()
                     os.fsync(file.fileno())
@@ -219,20 +233,18 @@ def randomPasswordTest(passList):
                 os.fsync(file.fileno())
                 break;
                 break;
-                
-        
-        #Banking Password
-        elif(passSelect == 2):
+
+
+        #Banking password
+        elif(pword==passList[2]):
             while(numTries != 3):
                 userInput = input("Enter your banking password: ")
-                if(userInput == x):
+                if(userInput == pword):
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    file.write(st + ": Banking Random Password succesfully tested\n")
+                    file.write(st + ": Shopping Random Password succesfully tested | Time taken to test: "+str(timer)+" seconds \n")
                     file.flush()
                     os.fsync(file.fileno())
-                    passSelect = -1
-                    length -= 1
                     print("Success!\n")
                     break;
                     break;
@@ -241,7 +253,7 @@ def randomPasswordTest(passList):
                     numTries += 1
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S') #Gets current time
-                    line = st + ": Banking Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries)+ "\n"
+                    line = st + ": Banking Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " Time taken: " +str(timer)+ " seconds \n"
                     file.write(line)
                     file.flush()
                     os.fsync(file.fileno())
@@ -254,8 +266,9 @@ def randomPasswordTest(passList):
                 break;
                 break;
         
-            
+
         
+       
 def main():
     ts = time.time()
     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
@@ -309,8 +322,8 @@ def main():
             print("================Banking Password==================")
             print("Your banking password is: " +banking+"\n")
             testPassword(banking)
-            passList = [email, shopping, banking]
             
+            passList = [email,shopping,banking]
 
            
             randomPasswordTest(passList)
