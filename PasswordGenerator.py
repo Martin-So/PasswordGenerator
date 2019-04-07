@@ -15,6 +15,7 @@ import time
 import datetime
 import os
 import sys
+import csv
 from random import randint, shuffle
 
 numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
@@ -22,14 +23,12 @@ numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 nato_alphabet= ["Alpha","Bravo","Charlie","Delta","Echo","Foxtrot","Golf","Hotel","India","Juliet","Kilo","Lima","Mike","November","Oscar",
                 "Papa","Quebec","Romeo","Sierra","Tango","Uniform","Victor","Whiskey","Xray","Yankee","Zulu"]
 letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-passwords =["email", "shopping", "banking"]
+path = "logs.csv"
+with open(path, mode='a', newline='') as file:
+    writer = csv.writer(file)
+randUserID = randint(0, 2**(21))
 
 
-path = "logs.txt"
-file = open(path,"a")
-file.write("================Password Generator Logs==================\n")
-file.flush()
-os.fsync(file.fileno())
 
 # Gets a random number between 0 and 26 that represents the position of the letter in the alphabet
 def getRandomLetter():
@@ -67,7 +66,6 @@ def generatePassword():
 
     hasLetter = -1
     hasNumber = -1
-
     # Generates a 5 character long password 
     # TODO: Can be changed based on limit 
     for x in range (0, 5):
@@ -95,23 +93,21 @@ def generatePassword():
     
     return password
 
+#timer function
 
-    
 
-def testPassword(pw):
-    ts = time.time()
-    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-    file.write(st + ": Starting Random Password Test\n")
-    file.flush()
-    os.fsync(file.fileno())
+#Tests if user knows password
+def testPassword(pw,typ):
     userInput = "";
     timer = 0
     numTries = 0
-        
-    for x in range(0,2):
+    start = True
+    for x in range(0,3):
+        start = time.time()
         userInput = input("Practice entering your password: ")
-        timer+=1
         if(userInput == pw):
+            end = time.time()
+            timer = end-start
             print("Success! Please remember your password from now on\n")
             print("================Tips to Remember your Password==================")
             print("A = Alpha        H = Hotel           O = Oscar           V = Victor")
@@ -122,77 +118,67 @@ def testPassword(pw):
             print("F = Foxtrot      M = Mike            T = Tango")
             print("G = Golf         N = November        U = Uniform")
             print("===============================================================\n")
+            ts = time.time()
             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            file.write(st + ": Password succesfully created and tested | Time taken to test: "+str(timer)+" seconds \n")
-            file.flush()
-            os.fsync(file.fileno())
+            with open(path, mode='a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow([randUserID, st, typ + " Validate", "Success", timer])
+            return True
             break;
+        
         else:
             print("Error! Please try again\n")    
             numTries+=1
+            ts = time.time()
+            end = time.time()
+            timer = end-start
             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            file.write(st + ": Initial password test failed, creating a new password\n")
-            file.flush()
-            os.fsync(file.fileno())
-    if(numTries == 3):
-        print("Failed to test password. Please generate a new one! \n")
-        ts = time.time()
-        st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-        file.write(st + ": Initial password test failed. Redirecting to main\n")
-        file.flush()
-        os.fsync(file.fileno())
-        
+            with open(path, mode='a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow([randUserID, st, typ + " Validate", "Fail", timer])
+    print("Failed to test password. Please generate a new one! \n")              
+    return False
+
 def randomPasswordTest(passList):
-    ts = time.time()
-    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-    file.write(st + ": Starting Random Password Test\n")
-    file.flush()
-    os.fsync(file.fileno())
     randList = passList.copy()
     shuffle(randList)
-    
     for counter, pword in enumerate(randList):
         numTries = 0
         timer = 0
+        start = True
         print("================Random Password Tester================")
-  
+          
 
         #Email password test
         # compares first index in shuffled array with first index of sorted array of passwords
         # Sorted array has order of [Email, Shopping, Banking]
         if(pword == passList[0]):
             while(numTries != 3):
+                start = time.time()
                 userInput = input("Enter your email password: ")
-                timer+=1
                 if(userInput == pword):
-                    
                     print("Success!\n")
+                    end = time.time()
+                    timer = end-start
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    file.write(st + ": Email Random Password succesfully tested | Time taken to test: "+str(timer)+" seconds \n")
-                    file.flush()
-                    os.fsync(file.fileno())
+                    with open(path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([randUserID, st,"Email Login", "Success", timer])
                     break
                     break;
                 else:
-                    print("Error! Please try again\n")    
-                    numTries += 1
+                    numTries+=1
+                    end = time.time()
+                    timer = end-start
+                    print("Error! Please try again\n")
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    line = st + ": Email Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " | Time taken: " +str(timer)+ " seconds \n"
-                    file.write(line)
-                    file.flush()
-                    os.fsync(file.fileno())
-                    
+                    with open(path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([randUserID, st,"Email Login", "Fail", timer])
             if(numTries == 3):
                 print("Number of tries exceeded, please create a new password")
-                ts = time.time()
-                st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                file.write(st + ": Number of Tries exceeded, creating a new password\n")
-                file.flush()
-                os.fsync(file.fileno())
-                passSelect = -1
-        
                 break;
                 break;
 
@@ -201,35 +187,31 @@ def randomPasswordTest(passList):
         elif(pword == passList[1]):
             
             while(numTries != 3):
-                timer+=1
+                start = time.time()
                 userInput = input("Enter your shopping password: ")
                 if(userInput == pword ):
+                    end = time.time()
+                    timer = end - start
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    file.write(st + ": Shopping Random Password succesfully tested | Time taken to test: "+str(timer)+" seconds \n")
-                    file.flush()
-                    os.fsync(file.fileno())
-                    print("Success!\n")
-                   
+                    with open(path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([randUserID, st,"Shopping Login", "Success", timer])      
+                    print("Success!\n")               
                     break;
                     break;
                     
                 else:
                     print("Error! Please try again\n")
                     numTries+=1
-                    #Gets current date & time and logs it to logs.txt
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    line = st + ": Shopping Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " | Time taken: " +str(timer)+ " seconds \n"
-                    file.write(line)
-                    file.flush()
-                    os.fsync(file.fileno())
+                    with open(path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([randUserID, st,"Shopping Login", "Fail", timer])
             if(numTries == 3):
                 print("Number of tries exceeded, please create a new password")
-                st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                file.write(st + ": Number of Tries exceeded, creating a new password\n")
-                file.flush()
-                os.fsync(file.fileno())
+
                 break;
                 break;
 
@@ -237,13 +219,16 @@ def randomPasswordTest(passList):
         #Banking password
         elif(pword==passList[2]):
             while(numTries != 3):
+                start = time.time()
                 userInput = input("Enter your banking password: ")
                 if(userInput == pword):
+                    end = time.time()
+                    timer = end-start
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    file.write(st + ": Shopping Random Password succesfully tested | Time taken to test: "+str(timer)+" seconds \n")
-                    file.flush()
-                    os.fsync(file.fileno())
+                    with open(path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([randUserID, st,"Banking Login", "Success", timer])
                     print("Success!\n")
                     break;
                     break;
@@ -251,17 +236,16 @@ def randomPasswordTest(passList):
                     print("Error! Please try again\n")    
                     numTries += 1
                     ts = time.time()
-                    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S') #Gets current time
-                    line = st + ": Banking Random Password Test - Incorrect password entered | Number of tries: "+ str(numTries) + " | Time taken: " +str(timer)+ " seconds \n"
-                    file.write(line)
-                    file.flush()
-                    os.fsync(file.fileno())
+                    end = time.time()
+                    timer = end - start
+                    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                    with open(path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([randUserID, st,"Banking Login", "Fail", timer])
+                    
             if(numTries == 3):
-                st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
                 print("Number of tries exceeded, please create a new password")
-                file.write(st + ": Number of Tries exceeded, creating a new password\n")
-                file.flush()
-                os.fsync(file.fileno())
+
                 break;
                 break;
         
@@ -269,18 +253,22 @@ def randomPasswordTest(passList):
         
        
 def main():
-    ts = time.time()
-    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-    file.write(st + ": Program start\n")
-    file.flush()
-    os.fsync(file.fileno())
-    
+
     email = ""
     shopping =""
     banking =""
     
     runProg = True;
 
+    success = 0
+    fail = 0
+    ts = time.time()
+    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    with open(path, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([randUserID, st,"Program", "Start", 0])
+
+    
     while(runProg):
         print("================Password Generator==================")
         print("(1) Generate Passwords")
@@ -288,39 +276,26 @@ def main():
         print("(0) Exit");
         print("====================================================\n")
         choice = input("Select an option: ")
-        ts = time.time()
-        st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-        file.write(st + ": Main Menu\n")
-        file.flush()
-        os.fsync(file.fileno())
         if(choice == "1"):
-            ts = time.time()
-            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            file.write(st + ": Generating Email password\n")
-            file.flush()
-            os.fsync(file.fileno())
-            email = generatePassword()
+
             print("================Email Password==================")
+            email = generatePassword()
             print("Your email password is: " + email +"\n")
-            testPassword(email)
+            if(testPassword(email, "Email")==False):
+                continue;
             shopping = generatePassword()
-            ts = time.time()
-            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            file.write(st + ": Generating Shopping password\n")
-            file.flush()
-            os.fsync(file.fileno())
+
             print("================Shopping Password==================")
             print("Your shopping password is: " +shopping+"\n")
-            testPassword(shopping)
+            if(testPassword(shopping, "Shopping")==False):
+                continue;
+
+            
             banking = generatePassword()
-            ts = time.time()
-            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            file.write(st + ": Generating Banking password\n")
-            file.flush()
-            os.fsync(file.fileno())
             print("================Banking Password==================")
             print("Your banking password is: " +banking+"\n")
-            testPassword(banking)
+            if(testPassword(banking, "Banking" )==False):
+                continue;
             
             passList = [email,shopping,banking]
 
@@ -331,21 +306,16 @@ def main():
         elif(choice == "0"):
             ts = time.time()
             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            file.write(st + ": Program exiting\n")
-               
-            file.write("========================================================\n")
-            file.flush()
-            os.fsync(file.fileno())
-            exit()
+            with open(path, mode='a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow([randUserID, st,"Program", "End", 0])
             file.close()
+            exit()
+
             
             
         elif(choice == "2"):
-            ts = time.time()
-            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            file.write(st + ": Viewing Password tips\n")
-            file.flush()
-            os.fsync(file.fileno())
+
             print("================Tips to Remember your Password==================")
             print("A = Alpha        H = Hotel           O = Oscar           V = Victor")
             print("B = Bravo        I = India           P = Papa            W = Whiskey")
@@ -360,11 +330,7 @@ def main():
         else:
             print("Please enter a proper selection\n")
             continue
-            ts = time.time()
-            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            file.write(st + ": Incorrect menu selection")
-            file.flush()
-            os.fsync(file.fileno())
+
     
     
     
